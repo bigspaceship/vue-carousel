@@ -236,17 +236,18 @@
         const page = this.currentPage
         const width = this.slideWidth
         const dragged = this.dragOffset
+        const perPage = this.currentPerPage;
         let calc = page * width * Math.floor(this.currentPerPage)
         if (page === (this.pageCount - 1)) {
           const remainingPercent = 1 - (this.currentPerPage % 1)
           const slidesLeft = this.slideCount - this.currentPerPage
           // For 1.25
-          let remaining
-          if (this.currentPerPage > 2 && this.currentPerPage < 3) {
+          let remaining = 0;
+          if (this.currentPerPage > 2 && this.currentPerPage < 3 && perPage % 1 !== 0) {
             remaining = remainingPercent * width * this.currentPerPage
-          } else if (this.currentPerPage > 3) {
+          } else if (this.currentPerPage > 3 && perPage % 1 !== 0) {
             remaining = width * slidesLeft
-          } else {
+          } else if (this.currentPerPage < 2 && perPage % 1 !== 0) {
             remaining = remainingPercent * width * Math.floor(this.currentPerPage)
           }
           calc = ((page - 1) * width * Math.floor(this.currentPerPage)) + remaining
