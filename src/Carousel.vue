@@ -236,10 +236,25 @@
         const page = this.currentPage
         const width = this.slideWidth
         const dragged = this.dragOffset
+        let calc = page * width * Math.floor(this.currentPerPage)
+        if (page === (this.pageCount - 1)) {
+          const remainingPercent = 1 - (this.currentPerPage % 1)
+          const slidesLeft = this.slideCount - this.currentPerPage
+          // For 1.25
+          let remaining
+          if (this.currentPerPage > 2 && this.currentPerPage < 3) {
+            remaining = remainingPercent * width * this.currentPerPage
+          } else if (this.currentPerPage > 3) {
+            remaining = width * slidesLeft
+          } else {
+            remaining = remainingPercent * width * Math.floor(this.currentPerPage)
+          }
+          calc = ((page - 1) * width * Math.floor(this.currentPerPage)) + remaining
+        }
 
         // The offset distance depends on whether the scrollPerPage option is active.
         // If this option is active, the offset will be determined per page rather than per item.
-        const offset = (this.scrollPerPage) ? (page * width * this.currentPerPage) : (page * width)
+        const offset = (this.scrollPerPage) ? calc : (page * width)
 
         return (offset + dragged) * -1
       },
@@ -255,7 +270,14 @@
         const perPage = this.currentPerPage
 
         if (this.scrollPerPage) {
-          const pages = Math.ceil(slideCount / perPage)
+          let pages
+          if (perPage < 2 && perPage % 1 !== 0) {
+            // For perpage 1.25
+            pages = Math.ceil(slideCount / perPage) + 1
+          } else {
+            pages = Math.ceil(slideCount / perPage)
+          }
+
           return (pages < 1) ? 1 : pages // Be sure to not round down to zero pages
         }
 

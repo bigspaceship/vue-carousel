@@ -1,3 +1,14 @@
 {
-  "extends": "ssense/client",
+  "extends": "airbnb-base",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": "true",
+    "es6": "true",
+  },
+  "plugins": ["html"],
+  "rules": {
+    "semi": 0,
+    "comma-dangle": 0,
+    "quotes": 0,
+  },
 }
